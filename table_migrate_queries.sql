@@ -15,14 +15,14 @@ CREATE TABLE "class_groups" (
 
 CREATE TABLE "classes" (
   "id" bigserial PRIMARY KEY,
-  "class_groups_id" varchar,
+  "class_groups_id" varchar NOT NULL,
   "name" varchar NOT NULL
 );
 
 CREATE TABLE "student_class" (
   "id" bigserial PRIMARY KEY,
-  "student_id" varchar,
-  "class_id" varchar
+  "student_id" varchar NOT NULL,
+  "class_id" varchar NOT NULL
 );
 
 CREATE TABLE "subjects" (
@@ -32,9 +32,9 @@ CREATE TABLE "subjects" (
 
 CREATE TABLE "subject_reports" (
   "id" bigserial PRIMARY KEY,
-  "subject_id" bigint,
-  "teacher_id" bigint,
-  "student_class_id" bigint,
+  "subject_id" bigint NOT NULL,
+  "teacher_id" bigint NOT NULL,
+  "student_class_id" bigint NOT NULL,
   "mid_exam_result" int,
   "final_exam_result" int,
   "seasonal_exam_result" int[]
