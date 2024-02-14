@@ -6,6 +6,7 @@ package db
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Class struct {
@@ -40,7 +41,7 @@ type Subject struct {
 
 type SubjectReport struct {
 	ID                int64         `json:"id"`
-	CreatedAt         sql.NullTime  `json:"created_at"`
+	CreatedAt         time.Time     `json:"created_at"`
 	TeacherSubjectID  int64         `json:"teacher_subject_id"`
 	StudentClassID    int64         `json:"student_class_id"`
 	MidExamResult     sql.NullInt32 `json:"mid_exam_result"`
@@ -63,9 +64,9 @@ type TeacherSubject struct {
 
 type User struct {
 	// from nip or nis
-	ID        string       `json:"id"`
-	CreatedAt sql.NullTime `json:"created_at"`
-	Name      string       `json:"name"`
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	Name      string    `json:"name"`
 	// enum teacher, student
 	Role string `json:"role"`
 }
