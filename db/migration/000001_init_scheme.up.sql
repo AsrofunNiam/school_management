@@ -22,7 +22,7 @@ CREATE TABLE "classes" (
 CREATE TABLE "student_classes" (
   "id" bigserial PRIMARY KEY,
   "student_id" bigint NOT NULL,
-  "class_id" varchar NOT NULL,
+  "class_id" bigint NOT NULL,
   "period" varchar NOT NULL
 );
 
