@@ -13,4 +13,7 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgresql://root:saya@localhost:5432/school_management?sslmode=disable" -verbose down
 
-.PHONY: postgresdb createdb dropdb
+sqlc:
+	sqlc generate
+
+.PHONY: postgresdb createdb dropdb sqlc
