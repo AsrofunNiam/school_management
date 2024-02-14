@@ -40,7 +40,7 @@ CREATE TABLE "teacher_subjects" (
 
 CREATE TABLE "subject_reports" (
   "id" bigserial PRIMARY KEY,
-  "created_at" timestamptz DEFAULT (now()),
+  "created_at" timestamptz DEFAULT (now()) NOT NULL,
   "teacher_subject_id" bigint NOT NULL,
   "student_class_id" bigint NOT NULL,
   "mid_exam_result" int,
@@ -50,7 +50,7 @@ CREATE TABLE "subject_reports" (
 
 CREATE TABLE "users" (
   "id" varchar PRIMARY KEY,
-  "created_at" timestamptz DEFAULT (now()),
+  "created_at" timestamptz DEFAULT (now()) NOT NULL,
   "name" varchar NOT NULL,
   "role" varchar NOT NULL
 );
