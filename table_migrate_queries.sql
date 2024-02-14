@@ -1,11 +1,11 @@
 CREATE TABLE "teachers" (
   "id" bigserial PRIMARY KEY,
-  "user_id" varchar NOT NULL
+  "nip" varchar NOT NULL
 );
 
 CREATE TABLE "students" (
   "id" bigserial PRIMARY KEY,
-  "user_id" varchar NOT NULL
+  "nis" varchar NOT NULL
 );
 
 CREATE TABLE "class_groups" (
@@ -45,7 +45,7 @@ CREATE TABLE "subject_reports" (
   "student_class_id" bigint NOT NULL,
   "mid_exam_result" int,
   "final_exam_result" int,
-  "seasonal_exam_result" int[]
+  "monthly_exam_result" int[]
 );
 
 CREATE TABLE "users" (
@@ -64,9 +64,9 @@ COMMENT ON COLUMN "users"."id" IS 'from nip or nis';
 
 COMMENT ON COLUMN "users"."role" IS 'enum teacher, student';
 
-ALTER TABLE "teachers" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "teachers" ADD FOREIGN KEY ("nip") REFERENCES "users" ("id");
 
-ALTER TABLE "students" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "students" ADD FOREIGN KEY ("nis") REFERENCES "users" ("id");
 
 ALTER TABLE "classes" ADD FOREIGN KEY ("class_groups_id") REFERENCES "class_groups" ("id");
 
