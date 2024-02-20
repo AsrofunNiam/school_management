@@ -49,8 +49,7 @@ CREATE TABLE "subject_reports" (
 );
 
 CREATE TABLE "users" (
-  "id" varchar PRIMARY KEY,
-  "created_at" timestamptz DEFAULT (now()) NOT NULL,
+  "id" varchar PRIMARY KEY, 
   "name" varchar NOT NULL,
   "role" varchar NOT NULL
 );

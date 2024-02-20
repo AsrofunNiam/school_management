@@ -9,11 +9,11 @@ INSERT INTO users (
 RETURNING *;
 
 -- name: GetUser :one
-SELECT * FROM users
+SELECT id, name, role FROM users
 WHERE id = $1 LIMIT 1;
 
 -- name: ListUsers :many
-SELECT * FROM users
+SELECT id, name, role FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2;

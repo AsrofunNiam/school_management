@@ -2,10 +2,11 @@ package db
 
 import (
 	"database/sql"
-	_ "github.com/lib/pq"
 	"log"
 	"os"
 	"testing"
+
+	_ "github.com/lib/pq"
 )
 
 var testQueries *Queries
@@ -13,7 +14,7 @@ var testDB *sql.DB
 
 const (
 	dbDriver = "postgres"
-	dbSource = "postgresql://root:saya@localhost:5432/school_management?sslmode=disable"
+	dbSource = "postgresql://root:nakoding21@localhost:5432/school_management?sslmode=disable"
 )
 
 func TestMain(m *testing.M) {

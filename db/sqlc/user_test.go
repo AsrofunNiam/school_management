@@ -3,8 +3,8 @@ package db
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"testing"
-	"time"
 
 	"github.com/aadgraha/school_management/util"
 	"github.com/stretchr/testify/require"
@@ -22,7 +22,6 @@ func createRandomUser(t *testing.T) User {
 	require.Equal(t, arg.ID, user.ID)
 	require.Equal(t, arg.Name, user.Name)
 	require.Equal(t, arg.Role, user.Role)
-	require.NotZero(t, user.CreatedAt)
 	return user
 }
 func TestCreateUser(t *testing.T) {
@@ -38,7 +37,7 @@ func TestGetUser(t *testing.T) {
 	require.Equal(t, user1.ID, user2.ID)
 	require.Equal(t, user1.Name, user2.Name)
 	require.Equal(t, user1.Role, user2.Role)
-	require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
+	// require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
 }
 
 func TestUpdateUser(t *testing.T) {
@@ -56,7 +55,6 @@ func TestUpdateUser(t *testing.T) {
 	require.Equal(t, arg.ID_2, user2.ID)
 	require.Equal(t, arg.Name, user2.Name)
 	require.Equal(t, arg.Role, user2.Role)
-	require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)
 }
 
 func TestDeleteUser(t *testing.T) {
@@ -71,9 +69,9 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestListUser(t *testing.T) {
-	for i := 0; i < 15; i++ {
-		createRandomUser(t)
-	}
+	// for i := 0; i < 15; i++ {
+	// 	createRandomUser(t)
+	// }
 	arg := ListUsersParams{
 		Limit:  5,
 		Offset: 5,
@@ -81,6 +79,8 @@ func TestListUser(t *testing.T) {
 	users, err := testQueries.ListUsers(context.Background(), arg)
 	require.NoError(t, err)
 	require.Len(t, users, 5)
+
+	fmt.Println(users)
 
 	for _, user := range users {
 		require.NotEmpty(t, user)

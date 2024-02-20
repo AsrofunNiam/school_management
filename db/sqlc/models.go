@@ -64,9 +64,8 @@ type TeacherSubject struct {
 
 type User struct {
 	// from nip or nis
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	Name      string    `json:"name"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
 	// enum teacher, student
 	Role string `json:"role"`
 }

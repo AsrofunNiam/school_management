@@ -17,7 +17,7 @@ INSERT INTO users (
 ) VALUES (
   $1, $2, $3
 )
-RETURNING id, created_at, name, role
+RETURNING id, name, role
 `
 
 type CreateUserParams struct {
@@ -29,12 +29,7 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRowContext(ctx, createUser, arg.ID, arg.Name, arg.Role)
 	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.Name,
-		&i.Role,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Role)
 	return i, err
 }
 
@@ -49,24 +44,19 @@ func (q *Queries) DeleteUser(ctx context.Context, id string) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, created_at, name, role FROM users
+SELECT id, name, role FROM users
 WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id string) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUser, id)
 	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.Name,
-		&i.Role,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Role)
 	return i, err
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, created_at, name, role FROM users
+SELECT id, name, role FROM users
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -86,12 +76,7 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 	var items []User
 	for rows.Next() {
 		var i User
-		if err := rows.Scan(
-			&i.ID,
-			&i.CreatedAt,
-			&i.Name,
-			&i.Role,
-		); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.Role); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -112,7 +97,7 @@ SET
 	name = $2,
 	role = $3
 WHERE id = $1
-RETURNING id, created_at, name, role
+RETURNING id, name, role
 `
 
 type UpdateUserParams struct {
@@ -130,11 +115,6 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, e
 		arg.ID_2,
 	)
 	var i User
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.Name,
-		&i.Role,
-	)
+	err := row.Scan(&i.ID, &i.Name, &i.Role)
 	return i, err
 }
