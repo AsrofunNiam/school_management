@@ -72,3 +72,37 @@ func TestSubjectServices_Create(t *testing.T) {
 	assert.Equal(t, category.Name, result.Name)
 
 }
+
+func TestSubjectServices_UpdateSuccess(t *testing.T) {
+	// Return  value pointer
+	response := &db.UpdateSubjectNewParams{
+		ID:   3,
+		Name: "Budi",
+		ID_2: 2,
+	}
+
+	// Call by param
+	categoryRepositoryMock.Mock.On("Update", response.ID_2).Return(response)
+
+	result, err := categoryServices.Update(*response)
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+	assert.Equal(t, response.ID, result.ID)
+	assert.Equal(t, response.Name, result.Name)
+
+}
+
+func TestSubjectServices_Delete(t *testing.T) {
+	// Return  value pointer
+	category := &db.InsertSubjectParams{
+		ID:   2,
+		Name: "Budi",
+	}
+
+	// Call by param
+	categoryRepositoryMock.Mock.On("Delete", 2).Return(category)
+
+	result := categoryServices.Delete(2)
+	assert.NotNil(t, result)
+
+}

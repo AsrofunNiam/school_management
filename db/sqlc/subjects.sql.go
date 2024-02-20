@@ -11,9 +11,10 @@ import (
 )
 
 const deleteSubject = `-- name: DeleteSubject :exec
-SELECT id, name
+DELETE
 FROM subjects 
 WHERE id = $1
+RETURNING id, name
 `
 
 func (q *Queries) DeleteSubject(ctx context.Context, id int64) error {
@@ -100,4 +101,25 @@ type UpdateSubjectParams struct {
 func (q *Queries) UpdateSubject(ctx context.Context, arg UpdateSubjectParams) error {
 	_, err := q.db.ExecContext(ctx, updateSubject, arg.Name, arg.ID)
 	return err
+}
+
+const updateSubjectNew = `-- name: UpdateSubjectNew :one
+UPDATE subjects
+SET id = $1,
+    name = $2
+WHERE id = $3
+RETURNING id, name
+`
+
+type UpdateSubjectNewParams struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+	ID_2 int64  `json:"id_2"`
+}
+
+func (q *Queries) UpdateSubjectNew(ctx context.Context, arg UpdateSubjectNewParams) (Subject, error) {
+	row := q.db.QueryRowContext(ctx, updateSubjectNew, arg.ID, arg.Name, arg.ID_2)
+	var i Subject
+	err := row.Scan(&i.ID, &i.Name)
+	return i, err
 }

@@ -37,10 +37,6 @@ func (service *SubjectServiceImpl) FindById(id string) (*db.Subject, error) {
 }
 
 func (service *SubjectServiceImpl) Create(param db.InsertSubjectParams) (*db.Subject, error) {
-	// query := &db.Queries{}
-	// data, err := query.InsertSubject(context.Background(), db.InsertSubjectParams(param))
-	// err := service.Validate.Struct(param)
-
 	request := &db.InsertSubjectParams{
 		ID:   param.ID,
 		Name: param.Name,
@@ -54,4 +50,26 @@ func (service *SubjectServiceImpl) Create(param db.InsertSubjectParams) (*db.Sub
 		fmt.Println(category)
 		return category, nil
 	}
+}
+
+func (service *SubjectServiceImpl) Update(param db.UpdateSubjectNewParams) (*db.Subject, error) {
+	request := &db.UpdateSubjectNewParams{
+		ID:   param.ID,
+		Name: param.Name,
+		ID_2: param.ID_2,
+	}
+
+	category := service.SubJectRepository.Update(request)
+	if category == nil {
+		return category, errors.New(" Id Not Found")
+	} else {
+		fmt.Println(category)
+		return category, nil
+	}
+}
+
+func (service *SubjectServiceImpl) Delete(id int64) error {
+	service.SubJectRepository.Delete(id)
+
+	return errors.ErrUnsupported
 }

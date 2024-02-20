@@ -34,14 +34,24 @@ func (repository *SubjectRepositoryMockImpl) Create(subjectRequest *db.InsertSub
 
 	helper.PanicIfError(err)
 	return &data
-	// data := db.Subject{}
-	// return &data
-	// arguments := repository.Mock.Called(id)
-	// if arguments.Get(0) == nil {
-	// 	return nil
+}
 
-	// } else {
-	// 	category := arguments.Get(0).(db.Subject)
-	// 	return &category
-	// }
+func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *db.UpdateSubjectNewParams) *db.Subject {
+	query := &db.Queries{}
+	data, err := query.UpdateSubjectNew(context.Background(), db.UpdateSubjectNewParams{
+		Name: subjectRequest.Name,
+		ID:   subjectRequest.ID,
+		ID_2: subjectRequest.ID_2,
+	})
+
+	helper.PanicIfError(err)
+	return &data
+}
+
+func (repository *SubjectRepositoryMockImpl) Delete(id int64) error {
+	query := &db.Queries{}
+	err := query.DeleteSubject(context.Background(), id)
+
+	return err
+
 }
