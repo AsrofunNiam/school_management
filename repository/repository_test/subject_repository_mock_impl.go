@@ -5,7 +5,8 @@ import (
 	"context"
 
 	"github.com/aadgraha/school_management/helper"
-	db "github.com/aadgraha/school_management/model/sqlc"
+	dbx "github.com/aadgraha/school_management/model"
+	subject "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -17,28 +18,28 @@ func NewSubjectRepositoryMockImpl() SubJectRepositoryMock {
 	return &SubjectRepositoryMockImpl{}
 }
 
-func (repository *SubjectRepositoryMockImpl) FindById(id string) db.Subject {
+func (repository *SubjectRepositoryMockImpl) FindById(dbx *dbx.Connect, id string) subject.Subject {
 	arguments := repository.Mock.Called(id)
 	// if arguments.Get(0) == nil {
 	// 	return nil
 
 	// } else {
-	category := arguments.Get(0).(db.Subject)
+	category := arguments.Get(0).(subject.Subject)
 	return category
 	// }
 }
 
-func (repository *SubjectRepositoryMockImpl) Create(subjectRequest *db.InsertSubjectParams) *db.Subject {
-	query := &db.Queries{}
-	data, err := query.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
+func (repository *SubjectRepositoryMockImpl) Create(subjectRequest *subject.InsertSubjectParams) *subject.Subject {
+	query := &subject.Queries{}
+	data, err := query.InsertSubject(context.Background(), subject.InsertSubjectParams(*subjectRequest))
 
 	helper.PanicIfError(err)
 	return &data
 }
 
-func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *db.UpdateSubjectNewParams) *db.Subject {
-	query := &db.Queries{}
-	data, err := query.UpdateSubjectNew(context.Background(), db.UpdateSubjectNewParams{
+func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *subject.UpdateSubjectNewParams) *subject.Subject {
+	query := &subject.Queries{}
+	data, err := query.UpdateSubjectNew(context.Background(), subject.UpdateSubjectNewParams{
 		Name: subjectRequest.Name,
 		ID:   subjectRequest.ID,
 		ID_2: subjectRequest.ID_2,
@@ -49,7 +50,7 @@ func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *db.UpdateSub
 }
 
 func (repository *SubjectRepositoryMockImpl) Delete(id int64) error {
-	query := &db.Queries{}
+	query := &subject.Queries{}
 	err := query.DeleteSubject(context.Background(), id)
 
 	return err

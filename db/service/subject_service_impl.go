@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/aadgraha/school_management/db/repository"
-	db "github.com/aadgraha/school_management/db/sqlc"
+	subject "github.com/aadgraha/school_management/db/sqlc"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -24,7 +24,7 @@ func NewSubjectServiceImpl(
 	}
 }
 
-func (service *SubjectServiceImpl) FindById(id string) (db.Subject, error) {
+func (service *SubjectServiceImpl) FindById(id string) (subject.Subject, error) {
 	category := service.SubJectRepository.FindById(id)
 
 	// if category == nil {
@@ -36,8 +36,8 @@ func (service *SubjectServiceImpl) FindById(id string) (db.Subject, error) {
 	// }
 }
 
-func (service *SubjectServiceImpl) Create(param db.InsertSubjectParams) (*db.Subject, error) {
-	request := &db.InsertSubjectParams{
+func (service *SubjectServiceImpl) Create(param subject.InsertSubjectParams) (*subject.Subject, error) {
+	request := &subject.InsertSubjectParams{
 		ID:   param.ID,
 		Name: param.Name,
 	}
@@ -52,8 +52,8 @@ func (service *SubjectServiceImpl) Create(param db.InsertSubjectParams) (*db.Sub
 	}
 }
 
-func (service *SubjectServiceImpl) Update(param db.UpdateSubjectNewParams) (*db.Subject, error) {
-	request := &db.UpdateSubjectNewParams{
+func (service *SubjectServiceImpl) Update(param subject.UpdateSubjectNewParams) (*subject.Subject, error) {
+	request := &subject.UpdateSubjectNewParams{
 		ID:   param.ID,
 		Name: param.Name,
 		ID_2: param.ID_2,

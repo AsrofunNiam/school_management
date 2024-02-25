@@ -10,29 +10,23 @@ import (
 )
 
 type SubjectRepositoryImpl struct {
-	Connect *dbx.Connect
 }
 
-func NewSubjectRepository(connect *dbx.Connect) SubJectRepository {
-	return &SubjectRepositoryImpl{Connect: connect}
+func NewSubjectRepository() SubJectRepository {
+	return &SubjectRepositoryImpl{}
 }
 
-func (repository *SubjectRepositoryImpl) FindById(id string) db.Subject {
+func (repository *SubjectRepositoryImpl) FindById(dbx *dbx.Connect, id string) db.Subject {
 	newID, _ := strconv.ParseInt(id, 10, 64)
-	// data := db.Subject{}
-	// var query *db.Queries
-	queries := repository.Connect.Query
-	subject, err := queries.SelectSubject(context.Background(), newID)
+	subject, err := dbx.Query.SelectSubject(context.Background(), newID)
 	helper.PanicIfError(err)
 
 	return subject
 }
 
 func (repository *SubjectRepositoryImpl) Create(subjectRequest *db.InsertSubjectParams) *db.Subject {
-	// query := &db.Queries{}
-	// queries := dbx.Connect.Query
-	queries := repository.Connect.Query
-	data, err := queries.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
+	query := &db.Queries{}
+	data, err := query.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
 	helper.PanicIfError(err)
 
 	return &data
@@ -53,12 +47,3 @@ func (repository *SubjectRepositoryImpl) Delete(id int64) error {
 	return err
 
 }
-
-// func (repository *SubjectRepositoryImpl) FindLengthAll() []db.Subject {
-// 	query := &db.Queries{}
-// 	test := query.SelectSubject(context.Background())
-// 	// err := query.DeleteSubject(context.Background(), id)
-
-// 	return err
-
-// }

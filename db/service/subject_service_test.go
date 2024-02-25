@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/aadgraha/school_management/db/repository"
-	db "github.com/aadgraha/school_management/db/sqlc"
+	subject "github.com/aadgraha/school_management/db/sqlc"
 	"github.com/go-playground/validator/v10"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -39,7 +39,7 @@ func TestSubjectServices_GetNotFound(t *testing.T) {
 func TestSubjectServices_GetSuccess(t *testing.T) {
 
 	// Return  value pointer
-	category := db.Subject{
+	category := subject.Subject{
 		ID:   3,
 		Name: "Budi",
 	}
@@ -57,7 +57,7 @@ func TestSubjectServices_GetSuccess(t *testing.T) {
 
 func TestSubjectServices_Create(t *testing.T) {
 	// Return  value pointer
-	category := &db.InsertSubjectParams{
+	category := &subject.InsertSubjectParams{
 		ID:   3,
 		Name: "Budi",
 	}
@@ -75,7 +75,7 @@ func TestSubjectServices_Create(t *testing.T) {
 
 func TestSubjectServices_UpdateSuccess(t *testing.T) {
 	// Return  value pointer
-	response := &db.UpdateSubjectNewParams{
+	response := &subject.UpdateSubjectNewParams{
 		ID:   3,
 		Name: "Budi",
 		ID_2: 2,
@@ -94,7 +94,7 @@ func TestSubjectServices_UpdateSuccess(t *testing.T) {
 
 func TestSubjectServices_Delete(t *testing.T) {
 	// Return  value pointer
-	category := &db.InsertSubjectParams{
+	category := &subject.InsertSubjectParams{
 		ID:   2,
 		Name: "Budi",
 	}

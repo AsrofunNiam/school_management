@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	sqlc_generate "github.com/aadgraha/school_management/model/sqlc"
+	subject "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/aadgraha/school_management/model/web"
 	"github.com/aadgraha/school_management/service"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func NewSubjectController(SubjectService service.SubjectService) SubjectControll
 }
 
 func (controller *SubjectControllerImpl) Create(c *gin.Context) {
-	data_request := sqlc_generate.InsertSubjectParams{}
+	data_request := subject.InsertSubjectParams{}
 	controller.subjectService.Create(data_request)
 }
 
@@ -29,25 +29,8 @@ func (controller *SubjectControllerImpl) Delete(c *gin.Context) {
 	controller.subjectService.Delete(int64(userId))
 }
 
-// func (controller *UserControllerImpl) FindAll(c *gin.Context, _ *auth.AccessDetails) {
-// 	filters := helper.FilterFromQueryString(c, "dept.eq")
-
-// 	userResponses := controller.userService.FindAll(&filters)
-// 	webResponse := web.WebResponse{
-// 		Success: true,
-// 		Message: helper.MessageDataFoundOrNot(userResponses),
-// 		Data:    userResponses,
-// 	}
-
-// 	c.JSON(http.StatusOK, webResponse)
-// }
-
 func (controller *SubjectControllerImpl) FindById(c *gin.Context) {
-	// request := "22"
-	// filters := helper.FilterFromQueryString(c, "dept.eq")
-	paramID := c.Param("customerId")
-
-	// userResponse := controller.subjectService.FindById(request)
+	paramID := c.Param("subjectId")
 	userResponses, err := controller.subjectService.FindById(paramID)
 	if err != nil {
 		return
@@ -63,7 +46,7 @@ func (controller *SubjectControllerImpl) FindById(c *gin.Context) {
 }
 
 func (controller *SubjectControllerImpl) Update(c *gin.Context) {
-	data_request := sqlc_generate.UpdateSubjectNewParams{}
+	data_request := subject.UpdateSubjectNewParams{}
 
 	controller.subjectService.Update(data_request)
 

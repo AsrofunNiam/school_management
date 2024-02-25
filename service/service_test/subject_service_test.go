@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	db "github.com/aadgraha/school_management/model/sqlc"
-	// test_db "github.com/aadgraha/school_management"
+	subject "github.com/aadgraha/school_management/model/sqlc"
 	repository_test "github.com/aadgraha/school_management/repository/repository_test"
 	service "github.com/aadgraha/school_management/service"
 	"github.com/go-playground/validator/v10"
@@ -41,7 +40,7 @@ func TestSubjectServices_GetNotFound(t *testing.T) {
 func TestSubjectServices_GetSuccess(t *testing.T) {
 
 	// Return  value pointer
-	category := db.Subject{
+	category := subject.Subject{
 		ID:   3,
 		Name: "Budi",
 	}
@@ -59,7 +58,7 @@ func TestSubjectServices_GetSuccess(t *testing.T) {
 
 func TestSubjectServices_Create(t *testing.T) {
 	// Return  value pointer
-	category := &db.InsertSubjectParams{
+	category := &subject.InsertSubjectParams{
 		ID:   3,
 		Name: "Budi",
 	}
@@ -77,7 +76,7 @@ func TestSubjectServices_Create(t *testing.T) {
 
 func TestSubjectServices_UpdateSuccess(t *testing.T) {
 	// Return  value pointer
-	response := db.UpdateSubjectNewParams{
+	response := subject.UpdateSubjectNewParams{
 		ID:   3,
 		Name: "Budi",
 		ID_2: 2,
@@ -96,7 +95,7 @@ func TestSubjectServices_UpdateSuccess(t *testing.T) {
 
 func TestSubjectServices_Delete(t *testing.T) {
 	// Return  value pointer
-	category := &db.InsertSubjectParams{
+	category := &subject.InsertSubjectParams{
 		ID:   2,
 		Name: "Budi",
 	}

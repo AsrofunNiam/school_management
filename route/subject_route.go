@@ -15,17 +15,17 @@ import (
 func SubjectRoute(router *gin.Engine, dbx *dbx.Connect, db *sql.DB, validate *validator.Validate) {
 
 	userService := service.NewSubjectServiceImpl(
-		repository.NewSubjectRepository(dbx),
+		repository.NewSubjectRepository(),
 		db,
-		// dbx,
+		dbx,
 		validate,
 	)
 	userController := controller.NewSubjectController(userService)
 
-	router.GET("/subject/:customerId", userController.FindById)
+	router.GET("/subject/:subjectId", userController.FindById)
 	// router.GET("/call/:id", auth.Auth(dataController.FindByID, []string{}))
-	// router.POST("/users", (userController.Create))
-	// router.PUT("/users/:customerId", userController.Update, []string{})
-	// router.GET("/users", userController.FindById, []string{})
-	// router.DELETE("/users/:customerId", userController.Delete, []string{})
+	// router.POST("/subject", (userController.Create))
+	// router.PUT("/subject/:subjectId", userController.Update, []string{})
+	// router.GET("/subject", userController.FindById, []string{})
+	// router.DELETE("/subject/:subjectId", userController.Delete, []string{})
 }
