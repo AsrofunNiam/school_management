@@ -1,7 +1,7 @@
 package service
 
 import (
-	db "github.com/aadgraha/school_management/db/sqlc"
+	db "github.com/aadgraha/school_management/model/sqlc"
 )
 
 type SubjectService interface {
@@ -9,4 +9,7 @@ type SubjectService interface {
 	Create(param db.InsertSubjectParams) (*db.Subject, error)
 	Update(param db.UpdateSubjectNewParams) (*db.Subject, error)
 	Delete(id int64) error
+
+	// test length
+	// FindLengthAll() []db.Subject
 }

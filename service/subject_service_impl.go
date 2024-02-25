@@ -1,11 +1,12 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 
-	"github.com/aadgraha/school_management/db/repository"
-	db "github.com/aadgraha/school_management/db/sqlc"
+	db "github.com/aadgraha/school_management/model/sqlc"
+	"github.com/aadgraha/school_management/repository"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -16,6 +17,8 @@ type SubjectServiceImpl struct {
 
 func NewSubjectServiceImpl(
 	subjectRepository repository.SubJectRepository,
+	db *sql.DB,
+	dbx *db.Queries,
 	validate *validator.Validate,
 ) SubjectService {
 	return &SubjectServiceImpl{
@@ -73,3 +76,11 @@ func (service *SubjectServiceImpl) Delete(id int64) error {
 
 	return errors.ErrUnsupported
 }
+
+// func (service *SubjectServiceImpl) FindLengthAll() []db.Subject {
+// 	// data = []db.Subject
+
+// 	data := service.SubJectRepository.FindLengthAll()
+
+// 	return data
+// }

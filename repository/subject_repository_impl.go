@@ -2,9 +2,10 @@ package repository
 
 import (
 	"context"
+	"strconv"
 
-	"github.com/aadgraha/school_management/db/helper"
-	db "github.com/aadgraha/school_management/db/sqlc"
+	"github.com/aadgraha/school_management/helper"
+	db "github.com/aadgraha/school_management/model/sqlc"
 )
 
 type SubjectRepositoryImpl struct {
@@ -15,8 +16,13 @@ func NewSubjectRepository() SubJectRepository {
 }
 
 func (repository *SubjectRepositoryImpl) FindById(id string) db.Subject {
-	data := db.Subject{}
-	return data
+	newID, _ := strconv.ParseInt(id, 10, 64)
+	// data := db.Subject{}
+	var query *db.Queries
+	subject, err := query.SelectSubject(context.Background(), newID)
+	helper.PanicIfError(err)
+
+	return subject
 }
 
 func (repository *SubjectRepositoryImpl) Create(subjectRequest *db.InsertSubjectParams) *db.Subject {
@@ -42,3 +48,12 @@ func (repository *SubjectRepositoryImpl) Delete(id int64) error {
 	return err
 
 }
+
+// func (repository *SubjectRepositoryImpl) FindLengthAll() []db.Subject {
+// 	query := &db.Queries{}
+// 	test := query.SelectSubject(context.Background())
+// 	// err := query.DeleteSubject(context.Background(), id)
+
+// 	return err
+
+// }

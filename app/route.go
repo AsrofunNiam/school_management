@@ -5,9 +5,15 @@ import (
 	"fmt"
 
 	"github.com/aadgraha/school_management/exception"
+	"github.com/aadgraha/school_management/route"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	// db_query "github.com/aadgraha/school_management/model/sqlc"
 )
+
+// var TestQueries *db_query.Queries
+
+// var TestDB *sql.DB
 
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -25,7 +31,9 @@ func ErrorHandler() gin.HandlerFunc {
 
 func NewRouter(db *sql.DB, validate *validator.Validate) *gin.Engine {
 	// routing data
+	// TestQueries = db_query.New(db)
 	router := gin.New()
 	router.Use(ErrorHandler())
+	route.SubjectRoute(router, db, TestQueries, validate)
 	return router
 }

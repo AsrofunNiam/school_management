@@ -1,6 +1,7 @@
 package main
 
 import (
+	// "database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,8 +10,14 @@ import (
 	app "github.com/aadgraha/school_management/app"
 	c "github.com/aadgraha/school_management/configuration"
 	"github.com/aadgraha/school_management/helper"
+
+	db_query "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/go-playground/validator/v10"
 )
+
+var TestQueries *db_query.Queries
+
+// var TestDB *sql.DB
 
 func main() {
 	configuration, err := c.LoadConfig()
@@ -23,7 +30,7 @@ func main() {
 
 	fmt.Println(err)
 
-	// 	// Validator
+	// Validator
 	validate := validator.New()
 	helper.RegisterValidation(validate)
 
@@ -32,8 +39,17 @@ func main() {
 		Addr:    ":" + port,
 		Handler: router,
 	}
+	TestQueries = db_query.New(db)
+
+	// routerTest := route_test.NewRouterSecond(db, validate)
+	// serverSecond := http.Server{
+	// 	Addr:    ":" + port,
+	// 	Handler: routerTest,
+	// }
+
 	log.Printf("Server is running on port %s", port)
 
 	err = server.ListenAndServe()
+	// err = serverSecond.ListenAndServe()
 	helper.PanicIfError(err)
 }

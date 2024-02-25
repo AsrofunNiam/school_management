@@ -4,8 +4,8 @@ package repository
 import (
 	"context"
 
-	"github.com/aadgraha/school_management/db/helper"
-	db "github.com/aadgraha/school_management/db/sqlc"
+	"github.com/aadgraha/school_management/helper"
+	db "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -20,7 +20,7 @@ func NewSubjectRepositoryMockImpl() SubJectRepositoryMock {
 func (repository *SubjectRepositoryMockImpl) FindById(id string) db.Subject {
 	arguments := repository.Mock.Called(id)
 	// if arguments.Get(0) == nil {
-	// 	return
+	// 	return nil
 
 	// } else {
 	category := arguments.Get(0).(db.Subject)

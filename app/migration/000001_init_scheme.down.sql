@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS subject_reports;
+DROP TABLE IF EXISTS teacher_subjects;
+DROP TABLE IF EXISTS student_classes;
+DROP TABLE IF EXISTS classes;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS teachers;
+DROP TABLE IF EXISTS class_groups;
+DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS users;
