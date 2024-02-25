@@ -10,12 +10,13 @@ import (
 	app "github.com/aadgraha/school_management/app"
 	c "github.com/aadgraha/school_management/configuration"
 	"github.com/aadgraha/school_management/helper"
+	conn "github.com/aadgraha/school_management/model"
 
 	db_query "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/go-playground/validator/v10"
 )
 
-var TestQueries *db_query.Queries
+// var TestQueries *db_query.Queries
 
 // var TestDB *sql.DB
 
@@ -33,19 +34,19 @@ func main() {
 	// Validator
 	validate := validator.New()
 	helper.RegisterValidation(validate)
+	// Buat instance Connect
+	conn := conn.Connect{
+		Query: db_query.New(db),
+	}
 
-	router := app.NewRouter(db, validate)
+	router := app.NewRouter(db, &conn, validate)
 	server := http.Server{
 		Addr:    ":" + port,
 		Handler: router,
 	}
-	TestQueries = db_query.New(db)
 
-	// routerTest := route_test.NewRouterSecond(db, validate)
-	// serverSecond := http.Server{
-	// 	Addr:    ":" + port,
-	// 	Handler: routerTest,
-	// }
+	// Menggunakan conn untuk mengakses Query
+	fmt.Println(conn.Query)
 
 	log.Printf("Server is running on port %s", port)
 

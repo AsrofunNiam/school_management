@@ -5,29 +5,34 @@ import (
 	"strconv"
 
 	"github.com/aadgraha/school_management/helper"
+	dbx "github.com/aadgraha/school_management/model"
 	db "github.com/aadgraha/school_management/model/sqlc"
 )
 
 type SubjectRepositoryImpl struct {
+	Connect *dbx.Connect
 }
 
-func NewSubjectRepository() SubJectRepository {
-	return &SubjectRepositoryImpl{}
+func NewSubjectRepository(connect *dbx.Connect) SubJectRepository {
+	return &SubjectRepositoryImpl{Connect: connect}
 }
 
 func (repository *SubjectRepositoryImpl) FindById(id string) db.Subject {
 	newID, _ := strconv.ParseInt(id, 10, 64)
 	// data := db.Subject{}
-	var query *db.Queries
-	subject, err := query.SelectSubject(context.Background(), newID)
+	// var query *db.Queries
+	queries := repository.Connect.Query
+	subject, err := queries.SelectSubject(context.Background(), newID)
 	helper.PanicIfError(err)
 
 	return subject
 }
 
 func (repository *SubjectRepositoryImpl) Create(subjectRequest *db.InsertSubjectParams) *db.Subject {
-	query := &db.Queries{}
-	data, err := query.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
+	// query := &db.Queries{}
+	// queries := dbx.Connect.Query
+	queries := repository.Connect.Query
+	data, err := queries.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
 	helper.PanicIfError(err)
 
 	return &data

@@ -18,7 +18,7 @@ type SubjectServiceImpl struct {
 func NewSubjectServiceImpl(
 	subjectRepository repository.SubJectRepository,
 	db *sql.DB,
-	dbx *db.Queries,
+	// dbx *db.Queries,
 	validate *validator.Validate,
 ) SubjectService {
 	return &SubjectServiceImpl{

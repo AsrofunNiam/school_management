@@ -4,19 +4,20 @@ import (
 	"database/sql"
 
 	"github.com/aadgraha/school_management/controller"
-	dbx "github.com/aadgraha/school_management/model/sqlc"
+	// dbx "github.com/aadgraha/school_management/model/sqlc"
+	dbx "github.com/aadgraha/school_management/model"
 	"github.com/aadgraha/school_management/repository"
 	"github.com/aadgraha/school_management/service"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
 
-func SubjectRoute(router *gin.Engine, db *sql.DB, dbx *dbx.Queries, validate *validator.Validate) {
+func SubjectRoute(router *gin.Engine, dbx *dbx.Connect, db *sql.DB, validate *validator.Validate) {
 
 	userService := service.NewSubjectServiceImpl(
-		repository.NewSubjectRepository(),
+		repository.NewSubjectRepository(dbx),
 		db,
-		dbx,
+		// dbx,
 		validate,
 	)
 	userController := controller.NewSubjectController(userService)

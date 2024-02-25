@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/aadgraha/school_management/exception"
+	dbx "github.com/aadgraha/school_management/model"
 	"github.com/aadgraha/school_management/route"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -29,11 +30,11 @@ func ErrorHandler() gin.HandlerFunc {
 	}
 }
 
-func NewRouter(db *sql.DB, validate *validator.Validate) *gin.Engine {
+func NewRouter(db *sql.DB, dbx *dbx.Connect, validate *validator.Validate) *gin.Engine {
 	// routing data
 	// TestQueries = db_query.New(db)
 	router := gin.New()
 	router.Use(ErrorHandler())
-	route.SubjectRoute(router, db, TestQueries, validate)
+	route.SubjectRoute(router, dbx, db, validate)
 	return router
 }
