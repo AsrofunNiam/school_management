@@ -7,7 +7,7 @@ import (
 
 type SubJectRepositoryMock interface {
 	FindById(dbx *dbx.Connect, id string) db.Subject
-	Create(subject *db.InsertSubjectParams) *db.Subject
-	Update(subject *db.UpdateSubjectNewParams) *db.Subject
-	Delete(id int64) error
+	Create(dbx *dbx.Connect, subject *db.InsertSubjectParams) *db.Subject
+	Update(dbx *dbx.Connect, subject *db.UpdateSubjectNewParams) *db.Subject
+	Delete(dbx *dbx.Connect, id int64) error
 }

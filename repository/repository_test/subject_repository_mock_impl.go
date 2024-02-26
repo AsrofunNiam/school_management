@@ -12,6 +12,7 @@ import (
 
 type SubjectRepositoryMockImpl struct {
 	Mock mock.Mock
+	DB   *dbx.Connect
 }
 
 func NewSubjectRepositoryMockImpl() SubJectRepositoryMock {
@@ -29,7 +30,7 @@ func (repository *SubjectRepositoryMockImpl) FindById(dbx *dbx.Connect, id strin
 	// }
 }
 
-func (repository *SubjectRepositoryMockImpl) Create(subjectRequest *subject.InsertSubjectParams) *subject.Subject {
+func (repository *SubjectRepositoryMockImpl) Create(dbx *dbx.Connect, subjectRequest *subject.InsertSubjectParams) *subject.Subject {
 	query := &subject.Queries{}
 	data, err := query.InsertSubject(context.Background(), subject.InsertSubjectParams(*subjectRequest))
 
@@ -37,7 +38,7 @@ func (repository *SubjectRepositoryMockImpl) Create(subjectRequest *subject.Inse
 	return &data
 }
 
-func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *subject.UpdateSubjectNewParams) *subject.Subject {
+func (repository *SubjectRepositoryMockImpl) Update(dbx *dbx.Connect, subjectRequest *subject.UpdateSubjectNewParams) *subject.Subject {
 	query := &subject.Queries{}
 	data, err := query.UpdateSubjectNew(context.Background(), subject.UpdateSubjectNewParams{
 		Name: subjectRequest.Name,
@@ -49,7 +50,7 @@ func (repository *SubjectRepositoryMockImpl) Update(subjectRequest *subject.Upda
 	return &data
 }
 
-func (repository *SubjectRepositoryMockImpl) Delete(id int64) error {
+func (repository *SubjectRepositoryMockImpl) Delete(dbx *dbx.Connect, id int64) error {
 	query := &subject.Queries{}
 	err := query.DeleteSubject(context.Background(), id)
 

@@ -1,8 +1,10 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/aadgraha/school_management/helper"
 	subject "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/aadgraha/school_management/model/web"
 	"github.com/aadgraha/school_management/service"
@@ -19,19 +21,9 @@ func NewSubjectController(SubjectService service.SubjectService) SubjectControll
 	}
 }
 
-func (controller *SubjectControllerImpl) Create(c *gin.Context) {
-	data_request := subject.InsertSubjectParams{}
-	controller.subjectService.Create(data_request)
-}
-
-func (controller *SubjectControllerImpl) Delete(c *gin.Context) {
-	userId := 1
-	controller.subjectService.Delete(int64(userId))
-}
-
 func (controller *SubjectControllerImpl) FindById(c *gin.Context) {
 	paramID := c.Param("subjectId")
-	userResponses, err := controller.subjectService.FindById(paramID)
+	subjectResponses, err := controller.subjectService.FindById(paramID)
 	if err != nil {
 		return
 	}
@@ -39,15 +31,62 @@ func (controller *SubjectControllerImpl) FindById(c *gin.Context) {
 	webResponse := web.WebResponse{
 		Success: true,
 		Message: "find by id success",
-		Data:    userResponses,
+		Data:    subjectResponses,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
+}
+
+func (controller *SubjectControllerImpl) Create(c *gin.Context) {
+	data_request := subject.InsertSubjectParams{}
+	fmt.Println("c, &request", c, &data_request)
+	helper.ReadFromRequestBody(c, &data_request)
+	subjectResponses, err := controller.subjectService.Create(data_request)
+	if err != nil {
+		return
+	}
+
+	webResponse := web.WebResponse{
+		Success: true,
+		Message: "Create New Subject Success",
+		Data:    subjectResponses,
 	}
 
 	c.JSON(http.StatusOK, webResponse)
 }
 
 func (controller *SubjectControllerImpl) Update(c *gin.Context) {
+	paramID := c.Param("subjectId")
 	data_request := subject.UpdateSubjectNewParams{}
+	fmt.Println("c, &request", c, &data_request)
+	helper.ReadFromRequestBody(c, &data_request)
+	subjectResponses, err := controller.subjectService.Update(paramID, data_request)
+	if err != nil {
+		return
+	}
 
-	controller.subjectService.Update(data_request)
+	webResponse := web.WebResponse{
+		Success: true,
+		Message: "Edit Subject success",
+		Data:    subjectResponses,
+	}
 
+	c.JSON(http.StatusOK, webResponse)
+
+}
+
+func (controller *SubjectControllerImpl) Delete(c *gin.Context) {
+	paramID := c.Param("subjectId")
+	subjectResponses, err := controller.subjectService.Delete(paramID)
+	if err != nil {
+		return
+	}
+
+	webResponse := web.WebResponse{
+		Success: true,
+		Message: fmt.Sprintf("Delete Subject %s  Success", subjectResponses.Name),
+		Data:    nil,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
 }

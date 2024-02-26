@@ -18,32 +18,31 @@ func NewSubjectRepository() SubJectRepository {
 
 func (repository *SubjectRepositoryImpl) FindById(dbx *dbx.Connect, id string) db.Subject {
 	newID, _ := strconv.ParseInt(id, 10, 64)
-	subject, err := dbx.Query.SelectSubject(context.Background(), newID)
+	subjectData, err := dbx.Query.SelectSubject(context.Background(), newID)
 	helper.PanicIfError(err)
 
-	return subject
+	return subjectData
 }
 
-func (repository *SubjectRepositoryImpl) Create(subjectRequest *db.InsertSubjectParams) *db.Subject {
-	query := &db.Queries{}
-	data, err := query.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
+func (repository *SubjectRepositoryImpl) Create(dbx *dbx.Connect, subjectRequest *db.InsertSubjectParams) *db.Subject {
+	subjectData, err := dbx.Query.InsertSubject(context.Background(), db.InsertSubjectParams(*subjectRequest))
 	helper.PanicIfError(err)
 
-	return &data
+	return &subjectData
 }
 
-func (repository *SubjectRepositoryImpl) Update(subjectRequest *db.UpdateSubjectNewParams) *db.Subject {
-	query := &db.Queries{}
-	data, err := query.UpdateSubjectNew(context.Background(), db.UpdateSubjectNewParams(*subjectRequest))
+func (repository *SubjectRepositoryImpl) Update(dbx *dbx.Connect, id string, subjectRequest *db.UpdateSubjectNewParams) *db.Subject {
+	subjectData, err := dbx.Query.UpdateSubjectNew(context.Background(), *subjectRequest)
 	helper.PanicIfError(err)
-
-	return &data
+	return &subjectData
 }
 
-func (repository *SubjectRepositoryImpl) Delete(id int64) error {
-	query := &db.Queries{}
-	err := query.DeleteSubject(context.Background(), id)
+func (repository *SubjectRepositoryImpl) Delete(dbx *dbx.Connect, id string) db.Subject {
+	newID, _ := strconv.ParseInt(id, 10, 64)
+	subjectData, err := dbx.Query.SelectSubject(context.Background(), newID)
+	helper.PanicIfError(err)
+	dbx.Query.DeleteSubject(context.Background(), newID)
 
-	return err
+	return subjectData
 
 }

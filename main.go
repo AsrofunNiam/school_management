@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,10 +14,6 @@ import (
 	db_query "github.com/aadgraha/school_management/model/sqlc"
 	"github.com/go-playground/validator/v10"
 )
-
-// var TestQueries *db_query.Queries
-
-// var TestDB *sql.DB
 
 func main() {
 	configuration, err := c.LoadConfig()
@@ -34,7 +29,8 @@ func main() {
 	// Validator
 	validate := validator.New()
 	helper.RegisterValidation(validate)
-	// Buat instance Connect
+
+	// instance Connect
 	conn := conn.Connect{
 		Query: db_query.New(db),
 	}
@@ -45,12 +41,8 @@ func main() {
 		Handler: router,
 	}
 
-	// Menggunakan conn untuk mengakses Query
-	fmt.Println(conn.Query)
-
 	log.Printf("Server is running on port %s", port)
 
 	err = server.ListenAndServe()
-	// err = serverSecond.ListenAndServe()
 	helper.PanicIfError(err)
 }

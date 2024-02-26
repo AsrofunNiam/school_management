@@ -39,6 +39,7 @@ type Subject struct {
 	Name string `json:"name"`
 }
 
+
 type SubjectReport struct {
 	ID                int64         `json:"id"`
 	CreatedAt         time.Time     `json:"created_at"`
