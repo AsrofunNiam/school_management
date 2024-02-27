@@ -16,6 +16,13 @@ func NewSubjectRepository() SubJectRepository {
 	return &SubjectRepositoryImpl{}
 }
 
+func (repository *SubjectRepositoryImpl) FindAll(dbx *dbx.Connect) []db.Subject {
+	subjectData, err := dbx.Query.SelectSubjects(context.Background())
+	helper.PanicIfError(err)
+
+	return subjectData
+}
+
 func (repository *SubjectRepositoryImpl) FindById(dbx *dbx.Connect, id string) db.Subject {
 	newID, _ := strconv.ParseInt(id, 10, 64)
 	subjectData, err := dbx.Query.SelectSubject(context.Background(), newID)

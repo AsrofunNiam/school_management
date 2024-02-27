@@ -21,6 +21,21 @@ func NewSubjectController(SubjectService service.SubjectService) SubjectControll
 	}
 }
 
+func (controller *SubjectControllerImpl) FindAll(c *gin.Context) {
+	subjectResponses, err := controller.subjectService.FindAll()
+	if err != nil {
+		return
+	}
+
+	webResponse := web.WebResponse{
+		Success: true,
+		Message: "find subjects success",
+		Data:    subjectResponses,
+	}
+
+	c.JSON(http.StatusOK, webResponse)
+}
+
 func (controller *SubjectControllerImpl) FindById(c *gin.Context) {
 	paramID := c.Param("subjectId")
 	subjectResponses, err := controller.subjectService.FindById(paramID)
@@ -48,7 +63,7 @@ func (controller *SubjectControllerImpl) Create(c *gin.Context) {
 
 	webResponse := web.WebResponse{
 		Success: true,
-		Message: "Create New Subject Success",
+		Message: "create new Subject success",
 		Data:    subjectResponses,
 	}
 
@@ -67,7 +82,7 @@ func (controller *SubjectControllerImpl) Update(c *gin.Context) {
 
 	webResponse := web.WebResponse{
 		Success: true,
-		Message: "Edit Subject success",
+		Message: "edit subject success",
 		Data:    subjectResponses,
 	}
 
@@ -84,7 +99,7 @@ func (controller *SubjectControllerImpl) Delete(c *gin.Context) {
 
 	webResponse := web.WebResponse{
 		Success: true,
-		Message: fmt.Sprintf("Delete Subject %s  Success", subjectResponses.Name),
+		Message: fmt.Sprintf("delete subject %s  success", subjectResponses.Name),
 		Data:    nil,
 	}
 

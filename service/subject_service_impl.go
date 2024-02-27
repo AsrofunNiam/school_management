@@ -30,15 +30,27 @@ func NewSubjectServiceImpl(
 	}
 }
 
-func (service *SubjectServiceImpl) FindById(id string) (subject.Subject, error) {
+func (service *SubjectServiceImpl) FindAll() ([]subject.Subject, error) {
 	tx := service.DB
-	category := service.SubJectRepository.FindById(tx, id)
+	request := service.SubJectRepository.FindAll(tx)
 
 	if tx == nil {
-		return category, errors.New(" Failed call db")
+		return request, errors.New(" Failed call db")
 
 	} else {
-		return category, nil
+		return request, nil
+	}
+}
+
+func (service *SubjectServiceImpl) FindById(id string) (subject.Subject, error) {
+	tx := service.DB
+	request := service.SubJectRepository.FindById(tx, id)
+
+	if tx == nil {
+		return request, errors.New(" Failed call db")
+
+	} else {
+		return request, nil
 	}
 }
 

@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	// "github.com/AsrofunNiam/tch_indonesia_backend/app"
 	app "github.com/aadgraha/school_management/app"
 	c "github.com/aadgraha/school_management/configuration"
 	"github.com/aadgraha/school_management/helper"

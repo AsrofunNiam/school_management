@@ -6,6 +6,7 @@ import (
 )
 
 type SubJectRepository interface {
+	FindAll(dbx *dbx.Connect) []db.Subject
 	FindById(dbx *dbx.Connect, id string) db.Subject
 	Create(dbx *dbx.Connect, subject *db.InsertSubjectParams) *db.Subject
 	Update(dbx *dbx.Connect, id string, subject *db.UpdateSubjectNewParams) *db.Subject

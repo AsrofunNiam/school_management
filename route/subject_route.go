@@ -22,10 +22,10 @@ func SubjectRoute(router *gin.Engine, dbx *dbx.Connect, db *sql.DB, validate *va
 	)
 	userController := controller.NewSubjectController(userService)
 
+	router.GET("/subjects", userController.FindAll)
 	router.GET("/subject/:subjectId", userController.FindById)
 	router.POST("/subject", (userController.Create))
 	router.PUT("/subject/:subjectId", userController.Update)
 	router.DELETE("/subject/:subjectId", userController.Delete)
 	// router.GET("/call/:id", auth.Auth(dataController.FindByID, []string{}))
-	// router.GET("/subject", userController.FindById, []string{})
 }

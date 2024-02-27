@@ -5,6 +5,7 @@ import (
 )
 
 type SubjectController interface {
+	FindAll(context *gin.Context)
 	FindById(context *gin.Context)
 	Create(context *gin.Context)
 	Update(context *gin.Context)
