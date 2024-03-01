@@ -1,29 +1,29 @@
 package db
 
-import (
-	"database/sql"
-	"log"
-	"os"
-	"testing"
-	// _ "github.com/lib/pq"
-)
+// import (
+// 	"database/sql"
+// 	"log"
+// 	"os"
+// 	"testing"
+// 	// _ "github.com/lib/pq"
+// )
 
-var testQueries *Queries
-var testDB *sql.DB
+// var testQueries *Queries
+// var testDB *sql.DB
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:nakoding21@localhost:5432/school_management?sslmode=disable"
-)
+// const (
+// 	dbDriver = "postgres"
+// 	dbSource = "postgresql://root:nakoding21@localhost:5432/school_management?sslmode=disable"
+// )
 
-func TestMain(m *testing.M) {
-	var err error
-	testDB, err = sql.Open(dbDriver, dbSource)
-	if err != nil {
-		log.Fatal("cannot connect to the DB:", err)
-	}
+// func TestMain(m *testing.M) {
+// 	var err error
+// 	testDB, err = sql.Open(dbDriver, dbSource)
+// 	if err != nil {
+// 		log.Fatal("cannot connect to the DB:", err)
+// 	}
 
-	testQueries = New(testDB)
+// 	testQueries = New(testDB)
 
-	os.Exit(m.Run())
-}
+// 	os.Exit(m.Run())
+// }
