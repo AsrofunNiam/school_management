@@ -13,15 +13,18 @@ INSERT INTO teacher_subjects (
 RETURNING *;
 
 -- name: SelectTeacherSubjects :many
-SELECT *
-FROM teacher_subjects
+SELECT t1.id, t1.teacher_id, t1.subject_id, t1.period, 
+       coalesce(t2.name, 'name subject not found') AS name_subject
+FROM teacher_subjects t1
+LEFT JOIN subjects t2 ON t2.id = t1.subject_id
 ;
 
 -- name: SelectTeacherSubject :one
 SELECT *
-FROM teacher_subjects
-WHERE id = $1 
-;
+FROM teacher_subjects t1
+LEFT JOIN subjects t2 ON t2.id = t1.subject_id
+WHERE t1.id = $1
+; 
 
 -- name: SelectJointTeacherSubjects :many
 SELECT t1.id, t1.subject_id, t1.teacher_id, t1.period, coalesce(t2.name, 'Register Subject')  As name_subject

@@ -36,5 +36,6 @@ func NewRouter(db *sql.DB, dbx *dbx.Connect, validate *validator.Validate) *gin.
 	router := gin.New()
 	router.Use(ErrorHandler())
 	route.SubjectRoute(router, dbx, db, validate)
+	route.TeacherSubjectRoute(router, dbx, db, validate)
 	return router
 }

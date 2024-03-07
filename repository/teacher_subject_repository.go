@@ -7,8 +7,8 @@ import (
 
 type TeacherSubjectRepository interface {
 	Create(dbx *dbx.Connect, subject *db.InsertTeacherSubjectParams) *db.TeacherSubject
-	FindAll(dbx *dbx.Connect) []db.TeacherSubject
-	FindById(dbx *dbx.Connect, id string) db.TeacherSubject
+	FindAll(dbx *dbx.Connect) []db.SelectTeacherSubjectsRow
+	FindById(dbx *dbx.Connect, id string) db.SelectTeacherSubjectRow
 	Update(dbx *dbx.Connect, id string, subject *db.UpdateTeacherSubjectNewParams) *db.TeacherSubject
-	Delete(dbx *dbx.Connect, id string) db.TeacherSubject
+	Delete(dbx *dbx.Connect, id string) db.SelectTeacherSubjectRow
 }

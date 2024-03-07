@@ -133,42 +133,65 @@ func (q *Queries) SelectJointTeacherSubjects(ctx context.Context) ([]SelectJoint
 }
 
 const selectTeacherSubject = `-- name: SelectTeacherSubject :one
-SELECT id, teacher_id, subject_id, period
-FROM teacher_subjects
-WHERE id = $1
+SELECT t1.id, teacher_id, subject_id, period, t2.id, name
+FROM teacher_subjects t1
+LEFT JOIN subjects t2 ON t2.id = t1.subject_id
+WHERE t1.id = $1
 `
 
-func (q *Queries) SelectTeacherSubject(ctx context.Context, id int64) (TeacherSubject, error) {
+type SelectTeacherSubjectRow struct {
+	ID        int64          `json:"id"`
+	TeacherID int64          `json:"teacher_id"`
+	SubjectID int64          `json:"subject_id"`
+	Period    string         `json:"period"`
+	ID_2      sql.NullInt64  `json:"id_2"`
+	Name      sql.NullString `json:"name"`
+}
+
+func (q *Queries) SelectTeacherSubject(ctx context.Context, id int64) (SelectTeacherSubjectRow, error) {
 	row := q.db.QueryRowContext(ctx, selectTeacherSubject, id)
-	var i TeacherSubject
+	var i SelectTeacherSubjectRow
 	err := row.Scan(
 		&i.ID,
 		&i.TeacherID,
 		&i.SubjectID,
 		&i.Period,
+		&i.ID_2,
+		&i.Name,
 	)
 	return i, err
 }
 
 const selectTeacherSubjects = `-- name: SelectTeacherSubjects :many
-SELECT id, teacher_id, subject_id, period
-FROM teacher_subjects
+SELECT t1.id, t1.teacher_id, t1.subject_id, t1.period, 
+       coalesce(t2.name, 'name subject not found') AS name_subject
+FROM teacher_subjects t1
+LEFT JOIN subjects t2 ON t2.id = t1.subject_id
 `
 
-func (q *Queries) SelectTeacherSubjects(ctx context.Context) ([]TeacherSubject, error) {
+type SelectTeacherSubjectsRow struct {
+	ID          int64  `json:"id"`
+	TeacherID   int64  `json:"teacher_id"`
+	SubjectID   int64  `json:"subject_id"`
+	Period      string `json:"period"`
+	NameSubject string `json:"name_subject"`
+}
+
+func (q *Queries) SelectTeacherSubjects(ctx context.Context) ([]SelectTeacherSubjectsRow, error) {
 	rows, err := q.db.QueryContext(ctx, selectTeacherSubjects)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []TeacherSubject
+	var items []SelectTeacherSubjectsRow
 	for rows.Next() {
-		var i TeacherSubject
+		var i SelectTeacherSubjectsRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.TeacherID,
 			&i.SubjectID,
 			&i.Period,
+			&i.NameSubject,
 		); err != nil {
 			return nil, err
 		}
