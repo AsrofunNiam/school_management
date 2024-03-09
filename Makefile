@@ -13,6 +13,9 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgresql://root:saya@localhost:5432/school_management?sslmode=disable" -verbose down
 
+migrateforce:
+	migrate -path db/migration -database "postgresql://root:saya@localhost:5432/school_management?sslmode=disable" -verbose force 1
+
 sqlc:
 	sqlc generate
 
