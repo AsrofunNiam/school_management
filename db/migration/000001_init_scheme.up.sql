@@ -1,11 +1,15 @@
 CREATE TABLE "teachers" (
   "id" bigserial PRIMARY KEY,
-  "nip" varchar NOT NULL
+  "nip" varchar NOT NULL,
+  "user_id" bigint NOT NULL,
+  "created_at" timestamptz DEFAULT (now()) NOT NULL
 );
 
 CREATE TABLE "students" (
   "id" bigserial PRIMARY KEY,
-  "nis" varchar NOT NULL
+  "nis" varchar NOT NULL,
+  "user_id" bigint NOT NULL,
+  "created_at" timestamptz DEFAULT (now()) NOT NULL
 );
 
 CREATE TABLE "class_groups" (
@@ -49,7 +53,7 @@ CREATE TABLE "subject_reports" (
 );
 
 CREATE TABLE "users" (
-  "id" varchar PRIMARY KEY,
+  "id" bigserial PRIMARY KEY,
   "created_at" timestamptz DEFAULT (now()) NOT NULL,
   "name" varchar NOT NULL,
   "role" varchar NOT NULL
@@ -61,13 +65,11 @@ COMMENT ON COLUMN "student_classes"."period" IS 'tahun awal TA';
 
 COMMENT ON COLUMN "teacher_subjects"."period" IS 'tahun awal TA';
 
-COMMENT ON COLUMN "users"."id" IS 'from nip or nis';
-
 COMMENT ON COLUMN "users"."role" IS 'enum teacher, student';
 
-ALTER TABLE "teachers" ADD FOREIGN KEY ("nip") REFERENCES "users" ("id");
+ALTER TABLE "teachers" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "students" ADD FOREIGN KEY ("nis") REFERENCES "users" ("id");
+ALTER TABLE "students" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "classes" ADD FOREIGN KEY ("class_groups_id") REFERENCES "class_groups" ("id");
 
