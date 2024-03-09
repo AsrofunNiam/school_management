@@ -11,34 +11,60 @@ import (
 
 const createTeacher = `-- name: CreateTeacher :one
 INSERT INTO teachers (
-	nip
+	nip,
+	user_id
 ) VALUES (
-  $1
+  $1, $2
 )
-RETURNING id, nip
+RETURNING id, nip, user_id, created_at
 `
 
-func (q *Queries) CreateTeacher(ctx context.Context, nip string) (Teacher, error) {
-	row := q.db.QueryRowContext(ctx, createTeacher, nip)
+type CreateTeacherParams struct {
+	Nip    string `json:"nip"`
+	UserID int64  `json:"user_id"`
+}
+
+func (q *Queries) CreateTeacher(ctx context.Context, arg CreateTeacherParams) (Teacher, error) {
+	row := q.db.QueryRowContext(ctx, createTeacher, arg.Nip, arg.UserID)
 	var i Teacher
-	err := row.Scan(&i.ID, &i.Nip)
+	err := row.Scan(
+		&i.ID,
+		&i.Nip,
+		&i.UserID,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
+const deleteTeacher = `-- name: DeleteTeacher :exec
+DELETE FROM teachers
+WHERE id = $1
+`
+
+func (q *Queries) DeleteTeacher(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteTeacher, id)
+	return err
+}
+
 const getTeacher = `-- name: GetTeacher :one
-SELECT id, nip FROM teachers
+SELECT id, nip, user_id, created_at FROM teachers
 WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetTeacher(ctx context.Context, id int64) (Teacher, error) {
 	row := q.db.QueryRowContext(ctx, getTeacher, id)
 	var i Teacher
-	err := row.Scan(&i.ID, &i.Nip)
+	err := row.Scan(
+		&i.ID,
+		&i.Nip,
+		&i.UserID,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
 const listTeachers = `-- name: ListTeachers :many
-SELECT id, nip FROM teachers
+SELECT id, nip, user_id, created_at FROM teachers
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -58,7 +84,12 @@ func (q *Queries) ListTeachers(ctx context.Context, arg ListTeachersParams) ([]T
 	var items []Teacher
 	for rows.Next() {
 		var i Teacher
-		if err := rows.Scan(&i.ID, &i.Nip); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Nip,
+			&i.UserID,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -70,4 +101,29 @@ func (q *Queries) ListTeachers(ctx context.Context, arg ListTeachersParams) ([]T
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateTeacher = `-- name: UpdateTeacher :one
+UPDATE teachers
+SET
+	nip = $1
+WHERE id = $2
+RETURNING id, nip, user_id, created_at
+`
+
+type UpdateTeacherParams struct {
+	Nip string `json:"nip"`
+	ID  int64  `json:"id"`
+}
+
+func (q *Queries) UpdateTeacher(ctx context.Context, arg UpdateTeacherParams) (Teacher, error) {
+	row := q.db.QueryRowContext(ctx, updateTeacher, arg.Nip, arg.ID)
+	var i Teacher
+	err := row.Scan(
+		&i.ID,
+		&i.Nip,
+		&i.UserID,
+		&i.CreatedAt,
+	)
+	return i, err
 }

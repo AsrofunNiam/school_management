@@ -12,14 +12,12 @@ import (
 
 func createRandomUser(t *testing.T) User {
 	arg := CreateUserParams{
-		ID:   util.RandomUserId(),
 		Name: util.RandomName(),
 		Role: util.RandomRole(),
 	}
 	user, err := testQueries.CreateUser(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, user)
-	require.Equal(t, arg.ID, user.ID)
 	require.Equal(t, arg.Name, user.Name)
 	require.Equal(t, arg.Role, user.Role)
 	require.NotZero(t, user.CreatedAt)
@@ -47,13 +45,10 @@ func TestUpdateUser(t *testing.T) {
 		ID:   user1.ID,
 		Name: util.RandomName(),
 		Role: util.RandomRole(),
-		ID_2: util.RandomUserId(),
 	}
 	user2, err := testQueries.UpdateUser(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, user2)
-
-	require.Equal(t, arg.ID_2, user2.ID)
 	require.Equal(t, arg.Name, user2.Name)
 	require.Equal(t, arg.Role, user2.Role)
 	require.WithinDuration(t, user1.CreatedAt, user2.CreatedAt, time.Second)

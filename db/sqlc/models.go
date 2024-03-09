@@ -22,8 +22,10 @@ type ClassGroup struct {
 }
 
 type Student struct {
-	ID  int64  `json:"id"`
-	Nis string `json:"nis"`
+	ID        int64     `json:"id"`
+	Nis       string    `json:"nis"`
+	UserID    int64     `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type StudentClass struct {
@@ -50,8 +52,10 @@ type SubjectReport struct {
 }
 
 type Teacher struct {
-	ID  int64  `json:"id"`
-	Nip string `json:"nip"`
+	ID        int64     `json:"id"`
+	Nip       string    `json:"nip"`
+	UserID    int64     `json:"user_id"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type TeacherSubject struct {
@@ -64,7 +68,7 @@ type TeacherSubject struct {
 
 type User struct {
 	// from nip or nis
-	ID        string    `json:"id"`
+	ID        int64     `json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	Name      string    `json:"name"`
 	// enum teacher, student

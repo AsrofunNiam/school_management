@@ -3,17 +3,20 @@ package db
 import (
 	"context"
 	"testing"
+	"time"
 
+	"github.com/aadgraha/school_management/util"
 	"github.com/stretchr/testify/require"
 )
 
 func createRandomTeacher(t *testing.T) Teacher {
 	user := createRandomUser(t)
-	nip := user.ID
-	teacher, err := testQueries.CreateTeacher(context.Background(), nip)
+	arg := CreateTeacherParams{Nip: util.RandomUserId(), UserID: user.ID}
+	teacher, err := testQueries.CreateTeacher(context.Background(), arg)
 	require.NoError(t, err)
 	require.NotEmpty(t, teacher)
-	require.Equal(t, nip, teacher.Nip)
+	require.Equal(t, arg.Nip, teacher.Nip)
+	require.WithinDuration(t, user.CreatedAt, teacher.CreatedAt, time.Second)
 	return teacher
 
 }
@@ -36,4 +39,26 @@ func TestListTeacher(t *testing.T) {
 	for _, teacher := range teachers {
 		require.NotEmpty(t, teacher)
 	}
+}
+
+func TestGetTeacher(t *testing.T) {
+	teacher1 := createRandomTeacher(t)
+	teacher2, err := testQueries.GetTeacher(context.Background(), teacher1.ID)
+	require.NoError(t, err)
+	require.NotEmpty(t, teacher2)
+
+	require.Equal(t, teacher1.ID, teacher2.ID)
+	require.Equal(t, teacher1.Nip, teacher2.Nip)
+	require.NotEmpty(t, teacher1.CreatedAt)
+}
+
+func TestUpdateTeacher(t *testing.T) {
+	teacher1 := createRandomTeacher(t)
+	require.NotEmpty(t, teacher1)
+	argUpdateTeacher := UpdateTeacherParams{Nip: util.RandomUserId(), ID: teacher1.ID}
+	teacher2, err := testQueries.UpdateTeacher(context.Background(), argUpdateTeacher)
+	require.NoError(t, err)
+	require.NotEmpty(t, teacher2)
+	require.Equal(t, argUpdateTeacher.ID, teacher2.ID)
+	require.Equal(t, argUpdateTeacher.Nip, teacher2.Nip)
 }

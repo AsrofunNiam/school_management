@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
+	"github.com/aadgraha/school_management/util"
 )
 
 type Store struct {
@@ -40,21 +42,21 @@ type CreateTeacherResult struct {
 	Teacher Teacher `json:"teacher"`
 }
 
-func (store *Store) CreateTeacherTx(ctx context.Context, arg CreateUserParams) (CreateTeacherResult, error) {
+func (store *Store) CreateTeacherTx(ctx context.Context, argUser CreateUserParams,) (CreateTeacherResult, error) {
 	var result CreateTeacherResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
 
 		var err error
-		result.User, err = q.CreateUser(ctx, arg)
-		if arg.Role != "teacher" {
+		result.User, err = q.CreateUser(ctx, argUser)
+		argTeacher := CreateTeacherParams{Nip: util.RandomUserId(), UserID: result.User.ID}
+		if argUser.Role != "teacher" {
 			err = fmt.Errorf("role is invalid")
 		}
 		if err != nil {
 			return err
 		}
-
-		result.Teacher, err = q.CreateTeacher(ctx, arg.ID)
+		result.Teacher, err = q.CreateTeacher(ctx, argTeacher)
 		if err != nil {
 			return err
 		}

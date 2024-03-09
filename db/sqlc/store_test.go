@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/aadgraha/school_management/util"
 	"github.com/stretchr/testify/require"
@@ -20,7 +21,7 @@ func TestCreateTeacherTx(t *testing.T) {
 
 		go func() {
 			createUserParam := CreateUserParams{
-				ID: util.RandomUserId(), Name: util.RandomName(), Role: "teacher",
+				Name: util.RandomName(), Role: "teachers",
 			}
 			result, err := store.CreateTeacherTx(context.Background(), createUserParam)
 			errs <- err
@@ -41,15 +42,16 @@ func TestCreateTeacherTx(t *testing.T) {
 
 		user := result.User
 		require.NotEmpty(t, user)
-		require.Equal(t, createUserParam.ID, user.ID)
 		require.Equal(t, createUserParam.Name, user.Name)
 		require.Equal(t, createUserParam.Role, user.Role)
 		require.NotZero(t, user.CreatedAt)
 
 		teacher := result.Teacher
 		require.NotEmpty(t, teacher)
-		require.Equal(t, user.ID, teacher.Nip)
 		require.NotZero(t, teacher.ID)
+		require.NotEmpty(t, teacher.CreatedAt)
+		require.NotEmpty(t, teacher.UserID)
+		require.WithinDuration(t, user.CreatedAt, teacher.CreatedAt, time.Second)
 
 		_, err = store.GetUser(context.Background(), user.ID)
 		require.NoError(t, err)

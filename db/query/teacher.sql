@@ -1,8 +1,9 @@
 -- name: CreateTeacher :one
 INSERT INTO teachers (
-	nip
+	nip,
+	user_id
 ) VALUES (
-  $1
+  $1, $2
 )
 RETURNING *;
 
@@ -15,3 +16,14 @@ SELECT * FROM teachers
 ORDER BY id
 LIMIT $1
 OFFSET $2;
+
+-- name: UpdateTeacher :one
+UPDATE teachers
+SET
+	nip = $1
+WHERE id = $2
+RETURNING *;
+
+-- name: DeleteTeacher :exec
+DELETE FROM teachers
+WHERE id = $1;

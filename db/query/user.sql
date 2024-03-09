@@ -1,10 +1,9 @@
 -- name: CreateUser :one
 INSERT INTO users (
-	id,
 	name,
 	role
 ) VALUES (
-  $1, $2, $3
+  $1, $2
 )
 RETURNING *;
 
@@ -21,10 +20,9 @@ OFFSET $2;
 -- name: UpdateUser :one
 UPDATE users
 SET
-	id = $4,
-	name = $2,
-	role = $3
-WHERE id = $1
+	name = $1,
+	role = $2
+WHERE id = $3
 RETURNING *;
 
 -- name: DeleteUser :exec

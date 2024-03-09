@@ -11,23 +11,21 @@ import (
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
-	id,
 	name,
 	role
 ) VALUES (
-  $1, $2, $3
+  $1, $2
 )
 RETURNING id, created_at, name, role
 `
 
 type CreateUserParams struct {
-	ID   string `json:"id"`
 	Name string `json:"name"`
 	Role string `json:"role"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.ID, arg.Name, arg.Role)
+	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.Role)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -43,7 +41,7 @@ DELETE FROM users
 WHERE id = $1
 `
 
-func (q *Queries) DeleteUser(ctx context.Context, id string) error {
+func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteUser, id)
 	return err
 }
@@ -53,7 +51,7 @@ SELECT id, created_at, name, role FROM users
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id string) (User, error) {
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUser, id)
 	var i User
 	err := row.Scan(
@@ -108,27 +106,20 @@ func (q *Queries) ListUsers(ctx context.Context, arg ListUsersParams) ([]User, e
 const updateUser = `-- name: UpdateUser :one
 UPDATE users
 SET
-	id = $4,
-	name = $2,
-	role = $3
-WHERE id = $1
+	name = $1,
+	role = $2
+WHERE id = $3
 RETURNING id, created_at, name, role
 `
 
 type UpdateUserParams struct {
-	ID   string `json:"id"`
 	Name string `json:"name"`
 	Role string `json:"role"`
-	ID_2 string `json:"id_2"`
+	ID   int64  `json:"id"`
 }
 
 func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, updateUser,
-		arg.ID,
-		arg.Name,
-		arg.Role,
-		arg.ID_2,
-	)
+	row := q.db.QueryRowContext(ctx, updateUser, arg.Name, arg.Role, arg.ID)
 	var i User
 	err := row.Scan(
 		&i.ID,
