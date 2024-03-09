@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"testing"
 	"time"
 
@@ -61,4 +62,16 @@ func TestUpdateTeacher(t *testing.T) {
 	require.NotEmpty(t, teacher2)
 	require.Equal(t, argUpdateTeacher.ID, teacher2.ID)
 	require.Equal(t, argUpdateTeacher.Nip, teacher2.Nip)
+}
+
+func TestDeleteTeacher(t *testing.T) {
+	teacher1 := createRandomTeacher(t)
+	require.NotEmpty(t, teacher1)
+	err := testQueries.DeleteTeacher(context.Background(), teacher1.ID)
+	require.NoError(t, err)
+
+	teacher2, err := testQueries.GetTeacher(context.Background(), teacher1.ID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+	require.Empty(t, teacher2)
 }
