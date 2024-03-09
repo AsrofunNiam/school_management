@@ -67,7 +67,6 @@ type TeacherSubject struct {
 }
 
 type User struct {
-	// from nip or nis
 	ID        int64     `json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	Name      string    `json:"name"`
