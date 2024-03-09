@@ -66,3 +66,33 @@ func (store *Store) CreateTeacherTx(ctx context.Context, argUser CreateUserParam
 
 	return result, err
 }
+
+type CreateStudentResult struct {
+	User    User    `json:"user"`
+	Student Student `json:"student"`
+}
+
+func (store *Store) CreateStudentTx(ctx context.Context, argUser CreateUserParams,) (CreateStudentResult, error) {
+	var result CreateStudentResult
+
+	err := store.execTx(ctx, func(q *Queries) error {
+
+		var err error
+		result.User, err = q.CreateUser(ctx, argUser)
+		argStudent := CreateStudentParams{Nis: util.RandomUserId(), UserID: result.User.ID}
+		if argUser.Role != "student" {
+			err = fmt.Errorf("role is invalid")
+		}
+		if err != nil {
+			return err
+		}
+		result.Student, err = q.CreateStudent(ctx, argStudent)
+		if err != nil {
+			return err
+		}
+		return nil
+
+	})
+
+	return result, err
+}
